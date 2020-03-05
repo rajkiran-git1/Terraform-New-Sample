@@ -58,3 +58,28 @@ module "security_group" {
     Environment = "UAT"
         
    }
+
+  root_block_device = [
+    {
+      volume_type = "gp2"
+      volume_size = 25
+      Name = "data-volume"
+    }
+  ]
+}
+
+resource "aws_ebs_volume" "ebs_volume" {
+  availability_zone = module.ec2-app-instance.availability_zone[1]
+  count             = "2"
+  size              = 50
+  type              = "gp2"
+
+}
+
+resource "aws_volume_attachment" "aws_ebs_volume" {
+  device_name = "/dev/sdf"
+  count       = "2"
+  volume_id   = aws_ebs_volume.ebs_volume[count.index].id
+  instance_id = module.ec2-app-instance.id[count.index]
+
+}
