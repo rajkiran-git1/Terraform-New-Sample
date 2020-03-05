@@ -35,7 +35,8 @@ module "security_group" {
   name                        = "App-Compoents-name"
   ami                         = var.ami
   instance_type               = "m5.2xlarge"
-  #security_groups	      = var.security_groups
+  #security_groups	          = aws_subnet.main-public-1.id
+    
   #availability_zone	      = element(var.availability_zone, count.index)
   subnet_id                   = tolist(data.aws_subnet_ids.all.ids)[1]
   vpc_security_group_ids      = [module.security_group.this_security_group_id]
